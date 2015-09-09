@@ -1,1 +1,1 @@
-# slack-yo-moma
+# slack-yo-mama
