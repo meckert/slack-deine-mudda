@@ -1,0 +1,23 @@
+{
+  "name": "slack-yo-mama",
+  "version": "1.0.0",
+  "description": "a slack bot throwing yo mama jokes at you",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meckert/slack-yo-mama.git"
+  },
+  "keywords": [
+    "slack",
+    "bot"
+  ],
+  "author": "Mathias Eckert",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/meckert/slack-yo-mama/issues"
+  },
+  "homepage": "https://github.com/meckert/slack-yo-mama#readme"
+}
