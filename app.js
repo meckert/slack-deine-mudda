@@ -1,7 +1,6 @@
-//TODO: add to package.json
 var express = require('express');
 var bodyParser = require('body-parser');
-var bot = require('/.bot.js');
+var bot = require('./bot.js');
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -10,7 +9,10 @@ var port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // test route
-app.get('/', function (req, res) { res.status(200).send('Hello world!') });
+app.get('/', function (req, res) {
+    var joke = bot.getJoke()
+    res.status(200).send(joke);
+});
 
 // error handler
 app.use(function (err, req, res, next) {
@@ -27,4 +29,4 @@ app.listen(port, function () {
 // Deine Mudda, Deine Mutter, USER Mudda, USER Mutter --> show de joke, show personalized de joke
 
 // how do I listen to other commands?
-app.post('/hello', bot);
+//app.post('/hello', bot);

@@ -38,13 +38,14 @@ function getUserLanguageString(userInput) {
 
 //TODO: think about personalization
 function getJoke(userInput) {
-    var langString = getUserLanguageString(userInput)
-    var lines = readLinesFromFile(langString);
+    //var langString = getUserLanguageString(userInput)
+    var lines = readLinesFromFile('de');
     return getRandomJoke(lines);
 }
 
-console.log(getJoke('Yo mama'));
-
+module.exports = {
+  getJoke: getJoke
+};
 
 //module.exports = function (req, res, next) {
 //    var userName = req.body.user_name;
