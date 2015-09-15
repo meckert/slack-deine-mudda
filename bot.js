@@ -16,7 +16,8 @@ function readLinesFromFile(language) {
 }
 
 function personalizeJoke(joke, userName, lang) {
-    var prefix = lang == 'de' ? 'Deine' : 'Yo'; //TODO: make sure everything starts with Deine or Yo
+    //TODO: replacing works only when lower casing first
+    var prefix = lang == 'de' ? 'deine' : 'yo';
     return joke.replace(prefix, userName + '\'s');
 }
 
