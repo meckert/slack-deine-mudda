@@ -10,8 +10,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // test route
 app.get('/', function (req, res) {
-    var joke = bot.getJoke()
-    res.status(200).send(joke);
+    //var joke = bot.getJoke()
+    //res.status(200).send(joke);
+    res.status(200).send('Hello there! Please send a POST request to /mother to get a nice joke');
 });
 
 // error handler
@@ -29,4 +30,4 @@ app.listen(port, function () {
 // Deine Mudda, Deine Mutter, USER Mudda, USER Mutter --> show de joke, show personalized de joke
 
 // how do I listen to other commands?
-//app.post('/hello', bot);
+app.post('/mother', bot);
