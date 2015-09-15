@@ -5,6 +5,7 @@ function getRandomJoke(jokes) {
     return jokes[randomLine];
 }
 
+//TODO: caching
 function readLinesFromFile(language) {
     try {
         var filename = __dirname + "/jokes/" + language + ".txt"
@@ -27,7 +28,7 @@ function getJoke() {
     return getRandomJoke(lines);
 }
 
-module.exports = function (req, res, next) {
+function handlePost(req, res, next) {
     var userName = req.body.user_name;
     var joke = getJoke();
     var personalizedJoke = personalizeJoke(joke, userName, 'de');
@@ -42,3 +43,8 @@ module.exports = function (req, res, next) {
         return res.status(200).end();
     }
 }
+
+module.exports = {
+    getJoke: getJoke,
+    callback: handlePost
+};
