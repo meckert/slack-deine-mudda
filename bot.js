@@ -1,6 +1,8 @@
 var fs = require('fs');
 
 var jokesCache;
+var currentLanguage;
+var fallbackLanguage = 'en';
 
 function getRandomJoke(jokes) {
     var randomLine = Math.floor(Math.random() * jokes.length);
@@ -8,8 +10,10 @@ function getRandomJoke(jokes) {
 }
 
 function readLinesFromFile(language) {
+    var lang = language ? language : fallbackLanguage;
+
     try {
-        var filename = __dirname + "/jokes/" + language + ".txt"
+        var filename = __dirname + "/jokes/" + lang + ".txt"
         var jokes = fs.readFileSync(filename, 'UTF8');
         jokesCache = jokes.trim().split(/\n/);
         return jokesCache;
@@ -25,21 +29,39 @@ function personalizeJoke(joke, username, lang) {
         personalized = joke.replace(/deine/i, username + '\'s'); //TODO: add case for deiner
     }
 
+    if (username && lang === 'en') {
+        personalized = joke.replace(/yo/i, username + '\'s');
+    }
+
     return personalized;
 }
 
-function getJoke(username) {
-    var lines = !jokesCache
-                    ? readLinesFromFile('de')
+function getUserLanguage(text) {
+    return text.length > 0
+            ? text.toLowerCase().indexOf('mutter') > -1 ? 'de' : fallbackLanguage
+            : fallbackLanguage;
+}
+
+function hasUserLanguageChanged(userLang) {
+    return userLang !== currentLanguage;
+}
+
+//TODO: support insulting other users moms :)
+function getJoke(username, lang) {
+    var lines = !jokesCache || hasUserLanguageChanged(lang)
+                    ? readLinesFromFile(lang)
                     : jokesCache;
 
     var joke = getRandomJoke(lines);
-    return personalizeJoke(joke, username, 'de');
+    return personalizeJoke(joke, username, lang);
 }
 
 function handlePost(req, res, next) {
+    var text = !req.body.text ? '' : req.body.text;
     var username = req.body.user_name;
-    var joke = getJoke(username);
+    var language = getUserLanguage(text);
+    var joke = getJoke(username, language);
+    currentLanguage = language;
     var botPayload = {
         text : joke
     };
