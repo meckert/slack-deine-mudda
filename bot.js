@@ -1,43 +1,51 @@
 var fs = require('fs');
 
+var jokesCache;
+
 function getRandomJoke(jokes) {
     var randomLine = Math.floor(Math.random() * jokes.length);
     return jokes[randomLine];
 }
 
-//TODO: caching
 function readLinesFromFile(language) {
     try {
         var filename = __dirname + "/jokes/" + language + ".txt"
         var jokes = fs.readFileSync(filename, 'UTF8');
-        return jokes.trim().split(/\n/);
+        jokesCache = jokes.trim().split(/\n/);
+        return jokesCache;
     } catch(e) {
         console.log(e);
     }
 }
 
-function personalizeJoke(joke, userName, lang) {
-    //TODO: replacing works only when lower casing first
-    var prefix = lang == 'de' ? 'deine' : 'yo';
-    return joke.replace(prefix, userName + '\'s');
+function personalizeJoke(joke, username, lang) {
+    var personalized = joke;
+
+    if (username && lang === 'de') {
+        personalized = joke.replace(/deine/i, username + '\'s'); //TODO: add case for deiner
+    }
+
+    return personalized;
 }
 
-//TODO: think about personalization
-function getJoke() {
-    var lines = readLinesFromFile('de');
-    return getRandomJoke(lines);
+function getJoke(username) {
+    var lines = !jokesCache
+                    ? readLinesFromFile('de')
+                    : jokesCache;
+
+    var joke = getRandomJoke(lines);
+    return personalizeJoke(joke, username, 'de');
 }
 
 function handlePost(req, res, next) {
-    var userName = req.body.user_name;
-    var joke = getJoke();
-    var personalizedJoke = personalizeJoke(joke, userName, 'de');
+    var username = req.body.user_name;
+    var joke = getJoke(username);
     var botPayload = {
-        text : personalizedJoke
+        text : joke
     };
 
     // avoid infinite loop
-    if (userName !== 'slackbot') {
+    if (username !== 'slackbot') {
         return res.status(200).json(botPayload);
     } else {
         return res.status(200).end();
