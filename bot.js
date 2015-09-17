@@ -38,7 +38,7 @@ function personalizeJoke(joke, username, lang) {
 
 function getUserLanguage(text) {
     return text.length > 0
-            ? text.toLowerCase().indexOf('mutter') > -1 ? 'de' : fallbackLanguage
+            ? text.toLowerCase().indexOf('mudda') > -1 ? 'de' : fallbackLanguage
             : fallbackLanguage;
 }
 
